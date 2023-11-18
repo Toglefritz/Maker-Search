@@ -1,0 +1,14 @@
+{
+  "errorSearchEmpty": "Please input a search term",
+  "@errorSearchEmpty": {
+    "description": "An error displayed when a search is submitted with the search field empty"
+  },
+  "headline": "Find Your Perfect Parts and Materials",
+  "@headline": {
+    "description": "The main headline for the app, displayed on the home page"
+  },
+  "searchPrompt": "Search for something",
+  "@searchPrompt": {
+    "description": "A label displayed in the search field"
+  }
+}
