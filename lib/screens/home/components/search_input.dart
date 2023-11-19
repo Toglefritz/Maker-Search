@@ -64,6 +64,7 @@ class SearchInputState extends State<SearchInput> {
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
+          cursorColor: Theme.of(context).primaryColorDark,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return AppLocalizations.of(context)!.errorSearchEmpty;

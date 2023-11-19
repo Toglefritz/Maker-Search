@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:maker_search/screens/components/web_background.dart';
+import 'package:maker_search/screens/home/components/web_background.dart';
 import 'package:maker_search/screens/home/home_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../components/search_input.dart';
+import 'components/search_input.dart';
 
+/// View for the [HomeRoute].
 class HomeView extends StatelessWidget {
   final HomeController state;
 
@@ -51,20 +52,35 @@ class HomeView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32.0,
+                if (!state.searching)
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32.0,
+                          ),
+                          child: SearchInput(
+                            onSubmit: (input) => state.onSearchSubmit(input),
+                          ),
                         ),
-                        child: SearchInput(
-                          onSubmit: (input) => state.onSearchSubmit(input),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                if (state.searching)
+                  Expanded(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 42,
+                          height: 42,
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
