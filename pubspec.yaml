@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Collections and utilities functions and classes related to collections.
+  collection: ^1.18.0
   # Provides localized string values
   flutter_localizations:
     sdk: flutter
