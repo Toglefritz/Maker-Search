@@ -15,8 +15,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.1
- # API for HTTP requests
+  # API for HTTP requests
   http: ^1.1.0
+  # APIs for parsing and manipulating HTML content outside the browser.
+  html: ^0.15.4
 
 dev_dependencies:
   flutter_test:

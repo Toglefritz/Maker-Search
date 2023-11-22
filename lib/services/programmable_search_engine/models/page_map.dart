@@ -21,7 +21,7 @@ class PageMap {
   /// Returns a [PageMap] object parsed from the JSON returned by the Google Custom Search API.
   factory PageMap.fromJson(Map<String, dynamic> json) {
     // Get product information from the JSON
-    Product product = Product.fromJson(json['product'][0]);
+    Product product = Product.fromJsonLd(json['product'][0]);
 
     return PageMap(
       product: product,

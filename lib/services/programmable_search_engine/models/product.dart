@@ -38,7 +38,7 @@ class Product {
   });
 
   /// Returns a [Product] object parsed from the JSON returned by the Google Custom Search API.
-  factory Product.fromJson(Map<String, dynamic> json) {
+  factory Product.fromJsonLd(Map<String, dynamic> json) {
     try {
       return Product(
         image: json['image'],
