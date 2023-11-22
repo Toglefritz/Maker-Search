@@ -1,8 +1,12 @@
 /// Represents monetary currencies.
 enum Currency {
-  usd('USD');
+  usd(id: 'USD', symbol: '\$');
 
+  /// ISO 4217 currency format identifier for the currency value.
   final String id;
 
-  const Currency(this.id);
+  /// The symbol used to indicate the currency in pricing information.
+  final String symbol;
+
+  const Currency({required this.id, required this.symbol});
 }
