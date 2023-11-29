@@ -8,26 +8,30 @@ import 'package:flutter/material.dart' as foundation;
 import '../programmable_search_engine/models/product.dart';
 
 /// This class contains public static methods used to make REST API calls to endpoints associated with getting
-/// information from websites containing JSON-LD objects.
+/// information from websites containing JSON-LD objects or HTML markup containing Microdata.
 class DataRetrievalService {
   /// Accepts a URL that should contain product information encoded in JSON-LD format (https://schema.org/Product)
-  /// conforming to the "Product" type defined by Schema.org. Return a [Product] obtained by extracting and parsing
-  /// website contents.
+  /// conforming to the "Product" type defined by Schema.org or Microdata tags in the HTML document. Returns a
+  /// [Product] obtained by extracting and parsing website contents.
   static Future<Product?> getProductFromWebPage(Uri uri) async {
     Map<String, dynamic>? jsonLdObject = await _extractJsonLdFromWebPage(uri);
 
     // If JSON-LD data was successfully extracted, parse it into a Product object.
-    if(jsonLdObject != null) {
+    if (jsonLdObject != null) {
       try {
         Product product = Product.fromJsonLd(jsonLdObject);
 
         return product;
-      } catch(e) {
+      } catch (e) {
         rethrow;
       }
     }
-    // Otherwise, if the JSON-LD object is null, return null.
-    else {
+
+    // Otherwise, if the JSON-LD object is null, try to extract Microdata information instead
+    Element? microdataObject = await _extractMicrodataFromWebPage(uri);
+
+    // If both the JSON-LD and Microdata objects are null, return null.
+    if(jsonLdObject == null && microdataObject == null) {
       return null;
     }
   }
@@ -62,21 +66,39 @@ class DataRetrievalService {
 
       // The website might contain several JSON-LD scripts an we are only interested in the "Product"
       // type right now. So we will find the first JSON-LD object with this type.
-      for(Element script in jsonLdScripts) {
+      for (Element script in jsonLdScripts) {
         // Try to decode the JSON-LD content.
         try {
           dynamic jsonLdData = json.decode(script.innerHtml);
 
           // Check if the JSON-LD content is of type, "Product".
-          if(jsonLdData['@type'] == 'Product') {
+          if (jsonLdData['@type'] == 'Product') {
             return jsonLdData;
           }
-        } catch(e) {
+        } catch (e) {
           foundation.debugPrint('Error decoding JSON-LD script with exception, $e');
         }
       }
+    } catch (e) {
+      foundation.debugPrint('Failed to fetch website contents with exception, $e');
     }
-    catch(e) {
+
+    return null;
+  }
+
+  /// Fetches a website's content and extracts a Microdata "Product" object.
+  static Future<Element?> _extractMicrodataFromWebPage(Uri uri) async {
+    try {
+      // Fetch the web page content.
+      Document document = await _fetchHtmlContent(uri);
+
+      // The `itemtype="http://schema.org/Product"` tag identifies Microdata that encodes product information.
+      Element? productElement = document.querySelector('[itemscope][itemtype="http://schema.org/Product"]');
+
+      return productElement;
+
+      // TODO get Microdata
+    } catch (e) {
       foundation.debugPrint('Failed to fetch website contents with exception, $e');
     }
 

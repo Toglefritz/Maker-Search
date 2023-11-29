@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:html/dom.dart';
 
 import '../programmable_search_engine/models/currency.dart';
 
@@ -20,6 +21,18 @@ class Offer {
     return Offer(
       currency: Currency.values.firstWhereOrNull((currency) => currency.id == jsonLd['priceCurrency'] as String),
       price: jsonLd['price'] is String ? int.parse(jsonLd['logo']) : jsonLd['price'],
+      // Handle other fields similarly
+    );
+  }
+
+  /// Returns a [Brand] instance from the provided HTML element containing Microdata.
+  factory Offer.fromMicrodata(Element productElement) {
+    return Offer(
+      currency: Currency.values.firstWhereOrNull(
+          (currency) => currency.id == productElement.querySelector('[itemprop="priceCurrency"]') as String),
+      price: productElement.querySelector('[itemprop="brand"]') != null
+          ? int.parse(productElement.querySelector('[itemprop="brand"]') as String)
+          : null,
       // Handle other fields similarly
     );
   }

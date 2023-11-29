@@ -85,8 +85,8 @@ class WebPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 2.0;
 
-    for (var point in points) {
-      for (var otherPoint in points) {
+    for (Point point in points) {
+      for (Point otherPoint in points) {
         if (point != otherPoint) {
           if ((point.x - otherPoint.x).abs() < 100 && (point.y - otherPoint.y).abs() < 100) {
             canvas.drawLine(Offset(point.x, point.y), Offset(otherPoint.x, otherPoint.y), paint);
